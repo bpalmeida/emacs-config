@@ -10,7 +10,6 @@ freest-mode
 snippets
 backup
 emacs.el
-init.el
 secrets.el
 transient
 .cache/

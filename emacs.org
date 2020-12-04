@@ -124,7 +124,13 @@
 * Languages
 ** Haskell
 #+BEGIN_SRC emacs-lisp
-;(require haskell-emacs) ; FFI (Foreign Function Interface) for Haskell functions
+
+  ; Some key bindings
+  ; C-c C-l to load a file
+  ; C-c C-z switch to Haskell interpreter (starts one if needed)
+  ; C-c C-t *:type* for symbol at point
+  ; M-. Go to definition
+  ; ...
 
   (use-package haskell-mode :ensure t)
   (require 'haskell-mode)
@@ -132,12 +138,38 @@
   (require 'haskell-process)
   (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 
+  (add-to-list 'load-path "~/.emacs.d/hs-lint/")
+  (require 'hs-lint)
+  (defun my-haskell-mode-hook ()
+    (local-set-key "\C-cl" 'hs-lint))
+  (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
+
+  (setenv "PATH" (concat "~/.local/bin:" (getenv "PATH")))
+
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+
+  ;; hslint on the command line only likes this indentation mode;
+  ;; alternatives commented out below.
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+  ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+  ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent)
+
+  ;; With flymake
+  ;; (use-package flymake-easy :ensure t)
+  ;; (use-package flymake-hlint :ensure t)
+  ;; (require 'flymake-hlint)
+  ;; (add-hook 'haskell-mode-hook 'flymake-hlint-load)
+
+  ;; With Flycheck
+  (add-to-list 'exec-path "~/.local/bin/") ; same as the output of *$ which hlint* or "$ whereis hlint"
+  (use-package flycheck-haskell :ensure t)
+  (add-hook 'haskell-mode-hook #'flycheck-haskell-setup)
 
 #+END_SRC
 ** FreeST
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/freest-mode/")
-(require 'freest-mode)
+(require 'freest-mode)`
 (add-to-list 'auto-mode-alist '("\\.fst\\'" . freest-mode))
 #+END_SRC
 ** Java
