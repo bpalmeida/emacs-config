@@ -611,6 +611,17 @@
 
 #+END_SRC
 
+** Keep track of opened buffers
+#+BEGIN_SRC emacs-lisp     
+   (savehist-mode 1)		   						; save my mini-buffer history in Emacs
+#+END_SRC   
+** Emacs server
+#+BEGIN_SRC emacs-lisp
+  ; start a server to open files on the running instance
+  ; starts unless it is already an instance
+  ; changed my desktop entry to invoke emacsclient
+  (unless (server-running-p) (server-start)) 
+#+END_SRC 
 ** COMMENT Mail
 #+BEGIN_SRC emacs-lisp
   (org-babel-load-file (expand-file-name "mail.org" user-emacs-directory))
