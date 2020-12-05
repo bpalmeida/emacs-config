@@ -216,18 +216,19 @@
 #+END_SRC
 ** LaTeX
 #+BEGIN_SRC emacs-lisp
-    ;; (require 'auto-complete-auctex)
-    (load "auctex.el" nil t t)
+      ;; (require 'auto-complete-auctex)
+  ;;    (load "auctex.el" nil t t)
+      (use-package auctex :ensure t)
 
-    (setq TeX-auto-save t)
-    (setq TeX-parse-self t)
-    (setq TeX-PDF-mode t)
-    (setq-default TeX-master nil) ; ask for master
-    (setq TeX-save-query nil)     ; Don't ask for saving a file
+      (setq TeX-auto-save t)
+      (setq TeX-parse-self t)
+      (setq TeX-PDF-mode t)
+      (setq-default TeX-master nil) ; ask for master
+      (setq TeX-save-query nil)     ; Don't ask for saving a file
 
-    ; always start the server for inverse search
-    (setq TeX-source-correlate-mode t)
-    (setq-default TeX-source-correlate-start-server t)
+      ; always start the server for inverse search
+      (setq TeX-source-correlate-mode t)
+      (setq-default TeX-source-correlate-start-server t)
 
 
 #+END_SRC
