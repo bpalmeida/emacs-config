@@ -165,6 +165,19 @@
   (use-package flycheck-haskell :ensure t)
   (add-hook 'haskell-mode-hook #'flycheck-haskell-setup)
 
+  (with-eval-after-load 'flycheck (flycheck-pos-tip-mode)) ;; popup errors
+
+  ;; stack install brittany
+  (use-package format-all :ensure t)
+  (defun haskell-mode-format-hook () (local-set-key (kbd "C-c C-f") 'format-all-buffer))
+  (add-hook 'haskell-mode-hook 'haskell-mode-format-hook)
+  ;; Temporarily commented out functions *define-format-all-formatter hindent* and
+  ;; define-format-all-formatter stylish-haskell on
+  ;; ~/.emacs.d/elpa/format-all-20201123.839/format-all.el
+  ;; in order to select automatically brittany
+  ;; check the repo https://github.com/lassik/emacs-format-all-the-code
+  ;; for changes
+
 #+END_SRC
 ** FreeST
 #+BEGIN_SRC emacs-lisp
