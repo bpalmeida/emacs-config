@@ -43,7 +43,8 @@
 ;;       (append (list '(width . 72) '(height . 40))))
 ;; (setq org-confirm-elisp-link-function nil)
       
-
+  (setq byte-compile-warnings '(cl-functions))
+  
   ;; Tangle configuration
   (org-babel-load-file (expand-file-name "emacs.org" user-emacs-directory))
   (garbage-collect))
