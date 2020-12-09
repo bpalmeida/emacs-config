@@ -111,7 +111,6 @@
 #+BEGIN_SRC emacs-lisp
 (set-frame-font "FiraCode 13" nil t)
 (set-face-attribute 'mode-line nil :font "Source Code Pro-12")
-
 #+END_SRC
   
 
@@ -636,6 +635,10 @@
   ; changed my desktop entry to invoke emacsclient
   (unless (server-running-p) (server-start)) 
 #+END_SRC 
+** Save Emacs session
+#+BEGIN_SRC emacs-lisp   
+  (desktop-save-mode 1) 
+#+END_SRC
 ** COMMENT Mail
 #+BEGIN_SRC emacs-lisp
   (org-babel-load-file (expand-file-name "mail.org" user-emacs-directory))

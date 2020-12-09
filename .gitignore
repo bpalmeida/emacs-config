@@ -19,3 +19,5 @@ transient
 .projectile-cache
 .signature
 history
+/.emacs.desktop
+/.emacs.desktop.lock
