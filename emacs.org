@@ -169,8 +169,13 @@
   (add-to-list 'exec-path "~/.local/bin/") ; same as the output of *$ which hlint* or "$ whereis hlint"
   (use-package flycheck-haskell :ensure t)
   (add-hook 'haskell-mode-hook #'flycheck-haskell-setup)
-
-  (with-eval-after-load 'flycheck (flycheck-pos-tip-mode)) ;; popup errors
+  ;; (use-package flycheck-pos-tip :ensure t)
+  (use-package flycheck-pos-tip
+      :defines flycheck-pos-tip-timeout
+      :hook (flycheck-mode . flycheck-pos-tip-mode)
+      :custom (flycheck-pos-tip-timeout 15))
+  ; (with-eval-after-load 'flycheck (flycheck-pos-tip-mode)) ;; popup errors
+  (setq flycheck-display-errors-delay 10)
 
   ;; stack install brittany
   (use-package format-all :ensure t)
