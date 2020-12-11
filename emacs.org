@@ -120,7 +120,7 @@
 #+END_SRC
   
 
-* TODO Secrets
+* Secrets
   #+BEGIN_SRC emacs-lisp
   (org-babel-load-file (expand-file-name "secrets.org" user-emacs-directory))
 #+END_SRC
