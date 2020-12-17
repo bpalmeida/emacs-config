@@ -192,7 +192,7 @@
 ** FreeST
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/freest-mode/")
-(require 'freest-mode)`
+(require 'freest-mode)
 (add-to-list 'auto-mode-alist '("\\.fst\\'" . freest-mode))
 #+END_SRC
 ** Java
