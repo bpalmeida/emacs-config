@@ -426,9 +426,9 @@ If (match-beginning 2) is non-nil, the item is followed by a `value'."
       )))
 
 (defvar promela-matching-delimiter-alist
-  '( (?(  . ?))
-     (?[  . ?])
-     (?{  . "\n}")
+  '( (?\(  . ?\))
+     (?\[  . ?\])
+     (?\{  . "\n}")
      ;(?<  . ?>)
      (?\' . ?\')
      (?\` . ?\`)

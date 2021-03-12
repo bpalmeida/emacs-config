@@ -54,12 +54,11 @@
     ;; (put 'downcase-region 'disabled nil)              ; Enable downcase-region
     ;; (put 'upcase-region 'disabled nil)                ; Enable upcase-region
     (set-default-coding-systems 'utf-8)               ; Default to utf-8 encoding
-
+    (global-visual-line-mode t)                       ; Don't break words on new line breaks
     (global-auto-revert-mode t)
     (cua-mode t)
     (transient-mark-mode 1) ;; No region when it is not highlighted
-
-    (column-number-mode 1) ;; enable column mode
+    (column-number-mode t) ;; enable column mode
 
     (setq read-buffer-completion-ignore-case t     ; ignore case on buffer completion
           read-file-name-completion-ignore-case t  ; ignore case on name completion
@@ -95,7 +94,7 @@
 #+END_SRC
 
 ** Theme
-
+   
 #+BEGIN_SRC emacs-lisp
   (load-theme 'atom-one-dark t)
 
@@ -130,65 +129,70 @@
 ** Haskell
 #+BEGIN_SRC emacs-lisp
 
-  ; Some key bindings
-  ; C-c C-l to load a file
-  ; C-c C-z switch to Haskell interpreter (starts one if needed)
-  ; C-c C-t *:type* for symbol at point
-  ; M-. Go to definition
-  ; ...
+    ; Some key bindings
+    ; C-c C-l to load a file
+    ; C-c C-z switch to Haskell interpreter (starts one if needed)
+    ; C-c C-t *:type* for symbol at point
+    ; M-. Go to definition
+    ; ...
 
-  (use-package haskell-mode :ensure t)
-  (require 'haskell-mode)
-  (require 'haskell-interactive-mode)
-  (require 'haskell-process)
-  (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+    (use-package haskell-mode :ensure t)
+    (require 'haskell-mode)
+    (require 'haskell-interactive-mode)
+    (require 'haskell-process)
+    (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
 
-  (add-to-list 'load-path "~/.emacs.d/hs-lint/")
-  (require 'hs-lint)
-  (defun my-haskell-mode-hook ()
-    (local-set-key "\C-cl" 'hs-lint))
-  (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
+    (setq haskell-process-type 'stack-ghci)
+    (setq haskell-compile-cabal-build-command "stack build")
+    ;; (custom-set-variables '(haskell-tags-on-save t))
 
-  (setenv "PATH" (concat "~/.local/bin:" (getenv "PATH")))
+    (add-to-list 'load-path "~/.emacs.d/hs-lint/")
+    (require 'hs-lint)
+    (defun my-haskell-mode-hook ()
+      (local-set-key "\C-cl" 'hs-lint))
+    (add-hook 'haskell-mode-hook 'my-haskell-mode-hook
+  )
+    (setenv "PATH" (concat "~/.local/bin:" (getenv "PATH")))
 
-  (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+    (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 
-  ;; hslint on the command line only likes this indentation mode;
-  ;; alternatives commented out below.
-  (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-  ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-  ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent)
+    ;; hslint on the command line only likes this indentation mode;
+    ;; alternatives commented out below.
+    (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
+    ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+    ;;(add-hook 'haskell-mode-hook 'turn-on-haskell-simple-indent)
 
-  ;; With flymake
-  ;; (use-package flymake-easy :ensure t)
-  ;; (use-package flymake-hlint :ensure t)
-  ;; (require 'flymake-hlint)
-  ;; (add-hook 'haskell-mode-hook 'flymake-hlint-load)
+    ;; With flymake
+    ;; (use-package flymake-easy :ensure t)
+    ;; (use-package flymake-hlint :ensure t)
+    ;; (require 'flymake-hlint)
+    ;; (add-hook 'haskell-mode-hook 'flymake-hlint-load)
 
-  ;; With Flycheck
-  (add-to-list 'exec-path "~/.local/bin/") ; same as the output of *$ which hlint* or "$ whereis hlint"
-  (use-package flycheck-haskell :ensure t)
-  (add-hook 'haskell-mode-hook #'flycheck-haskell-setup)
-  ;; (use-package flycheck-pos-tip :ensure t)
-  (use-package flycheck-pos-tip
-      :defines flycheck-pos-tip-timeout
-      :hook (flycheck-mode . flycheck-pos-tip-mode)
-      :custom (flycheck-pos-tip-timeout 15))
-  ; (with-eval-after-load 'flycheck (flycheck-pos-tip-mode)) ;; popup errors
-  (setq flycheck-display-errors-delay 10)
+    ;; With Flycheck
+    (add-to-list 'exec-path "~/.local/bin/") ; same as the output of *$ which hlint* or "$ whereis hlint"
+    (use-package flycheck-haskell :ensure t)
+    (add-hook 'haskell-mode-hook #'flycheck-haskell-setup)
+    ;; (use-package flycheck-pos-tip :ensure t)
+    (use-package flycheck-pos-tip
+        :defines flycheck-pos-tip-timeout
+        :hook (flycheck-mode . flycheck-pos-tip-mode)
+        :custom (flycheck-pos-tip-timeout 15))
+    ; (with-eval-after-load 'flycheck (flycheck-pos-tip-mode)) ;; popup errors
+    (setq flycheck-display-errors-delay 10)
 
-  ;; stack install brittany
-  (use-package format-all :ensure t)
-  (defun haskell-mode-format-hook () (local-set-key (kbd "C-c C-f") 'format-all-buffer))
-  (add-hook 'haskell-mode-hook 'haskell-mode-format-hook)
-  ;; Temporarily commented out functions *define-format-all-formatter hindent* and
-  ;; define-format-all-formatter stylish-haskell on
-  ;; ~/.emacs.d/elpa/format-all-20201123.839/format-all.el
-  ;; in order to select automatically brittany
-  ;; check the repo https://github.com/lassik/emacs-format-all-the-code
-  ;; for changes
+    ;; stack install brittany
+    (use-package format-all :ensure t)
+    (defun haskell-mode-format-hook () (local-set-key (kbd "C-c C-f") 'format-all-buffer))
+    (add-hook 'haskell-mode-hook 'haskell-mode-format-hook)
+    ;; Temporarily commented out functions *define-format-all-formatter hindent* and
+    ;; define-format-all-formatter stylish-haskell on
+    ;; ~/.emacs.d/elpa/format-all-20201123.839/format-all.el
+    ;; in order to select automatically brittany
+    ;; check the repo https://github.com/lassik/emacs-format-all-the-code
+    ;; for changes
 
 #+END_SRC
+
 ** FreeST
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/freest-mode/")
@@ -202,8 +206,6 @@
   (require 'lsp-java)
   (add-hook 'java-mode-hook 'lsp)
 
-
-
   (use-package yasnippet :config (yas-global-mode))
   (use-package lsp-mode :hook ((lsp-mode . lsp-enable-which-key-integration))
     :config (setq lsp-completion-enable-additional-text-edit nil))
@@ -213,17 +215,18 @@
   (use-package dap-mode :after lsp-mode :config (dap-auto-configure-mode))
   (use-package dap-java :ensure nil)
   (use-package helm-lsp)
-  (use-package helm
-    :config (helm-mode))
+  (use-package helm :config (helm-mode))
   (use-package lsp-treemacs)
 
 #+END_SRC
 
 ** Agda
 #+BEGIN_SRC emacs-lisp
+
+  (load-file (let ((coding-system-for-read 'utf-8))
+                  (shell-command-to-string "agda-mode locate")))
+
   '(agda2-program-args (quote ("-i . -i /usr/share/Agda-stdlib/src/")))
-  ;; (load-file (let ((coding-system-for-read 'utf-8))
-  ;;                 (shell-command-to-string "agda-mode locate")))
 
   '(agda2-highlight-datatype-face ((t (:foreground "#E6DB74"))))
   '(agda2-highlight-field-face ((t (:foreground "#A6E22E"))))
@@ -618,6 +621,7 @@
                           (mode . mu4e-compose-mode)
                           (name . "\*mu4e\*")
                           ))
+                 ("agda" (mode . agda2-mode))
                  ("haskell" (mode . haskell-mode))
                  ("freest" (name . "^.*fst$"))
                  ("emacs" (or
